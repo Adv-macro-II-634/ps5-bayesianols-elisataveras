@@ -13,11 +13,10 @@ fitlm([card.educ card.exper card.smsa card.black card.south],card.lwage)
 X=[ones(3010,1) card.educ card.exper card.smsa card.black card.south];
 
 %saving the parameters and they std
-
-b=[4.9133 ;0.073807 ;0.039313 ;0.16474 ;-0.18822 ;-0.12905 ];
-rmse=0.377 ;
 K=6;
 N=3010;
+b=[4.9133 ;0.073807 ;0.039313 ;0.16474 ;-0.18822 ;-0.12905 ];
+
 %variance matrix 
 
 std0=0.063121 ;
@@ -36,57 +35,98 @@ Var=(st.^2) ;
 %First using the flat distribution
 
 % Experimenting with the variance: use standard deviation proportional to the standard errors
-proportion=0.0010; %to target acceptance rate
+proportion=0.0015; %to target acceptance rate
 %define the sigma matrix for the likelihood function
-S= proportion*[[bsxfun(@times,Var,eye(k)) zeros(k,1)];[zeros(1,k) (rmse^2)]];
+S= proportion*[[bsxfun(@times,Var,eye(K)) zeros(K,1)];[zeros(1,K) (rmse^2)]];
 
 Par=[b;rmse^2];
 
 Y=card.lwage;
 
-%PARAMETERS 
-nsamp  = 1000;     
-parMatrix    = zeros(7,nsamp); 
+%PARAMETERS   
 burnin = 1000; % number of burn-in iterations
-lag = 1; % iterations between successive samples
 %store acceptance rate 
-acc = [0 0]; % vector to track the acceptance rate
-
+acc0 = [0 0]; % vector to track the acceptance rate
 %FIRST, THE BURNIN TO FIGURE THE ACCEPTANCE RATE TO HIT THE IDEAL VALUE  
 for i  = 1:burnin                        
     [B,a] = MHstepOLS(Par,S,X,Y); 
-    acc   = acc + [a 1];          
+    acc0   = acc0 + [a 1];          
 end
 
 %get the acceptance rate: 
-    acc(1)/acc(2)   
-
-    
+    acc0(1)/acc0(2)   
 %DO THE ACTUAL SAMPLE     
 % acceptance rate of 0.22 with r=0.0015; I will use this one then 
 
 %PARAMETERS 
+lag=1;
 nsamp  = 1000000;     
 parMatrix    = zeros(nsamp,7); 
-burnin = 1000; % number of burn-in iterations
-lag = 1; % iterations between successive samples
 %store acceptance rate 
-acc = [0 0]; % vector to track the acceptance rate
-
+acc1 = [0 0]; % vector to track the acceptance rate
 for i = 1:nsamp
     for j=1:lag
-        [Beta,a] = MHstepOLS(Par,S,X,Y);
-        acc = acc + [a 1];
+        [Par,a] = MHstepOLS(Par,S,X,Y);
+        acc1 = acc1 + [a 1];
     end
-    parMatrix(i,:) = Beta';
+    parMatrix(i,:) = Par';
 end
 
-    acc(1)/acc(2) 
+[[mean(parMatrix(:,1));mean(parMatrix(:,2));mean(parMatrix(:,3));...
+    mean(parMatrix(:,4));mean(parMatrix(:,5));mean(parMatrix(:,6));mean(parMatrix(:,7))]
+    [var(parMatrix(:,1));var(parMatrix(:,2));var(parMatrix(:,3));...
+    var(parMatrix(:,4));var(parMatrix(:,5));var(parMatrix(:,6));var(parMatrix(:,7))]]
 
 % histograms
-histogram(parMatrix(:,1),'Normalization','probability');
+histogram(parMatrix(:,1),'Normalization','probability')
+title('Histogram Constant');
+histogram(parMatrix(:,2),'Normalization','probability')
+title('Histogram Coefficient Education');
+histogram(parMatrix(:,3),'Normalization','probability')
+title('Histogram Coefficient Experience');
+histogram(parMatrix(:,4),'Normalization','probability')
+title('Histogram Coefficient smsa');
+histogram(parMatrix(:,5),'Normalization','probability')
+title('Histogram Coefficient Black');
+histogram(parMatrix(:,6),'Normalization','probability')
+title('Histogram Coefficient South');
+histogram(parMatrix(:,7),'Normalization','probability')
+title('Histogram Coefficient Root Mean Squared Error');
 
-% the second version  
+
+% the second version considering the numbers that we are given:
+Veduc=(0.06-0.035)^2/4;
+E=0.06;
+
+%PARAMETERS 
+lag=1;
+nsamp  = 1000000;     
+parMatrix    = zeros(nsamp,7); 
+%store acceptance rate 
+acc2 = [0 0]; % vector to track the acceptance rate
+for i = 1:nsamp
+    for j=1:lag
+        [Par,a] = MHstepOLS2(Par,S,X,Y,Veduc,E);
+        acc2 = acc2 + [a 1];
+    end
+    parMatrix(i,:) = Par';
+end
+
+% histograms
+histogram(parMatrix(:,1),'Normalization','probability')
+title('Histogram Constant');
+histogram(parMatrix(:,2),'Normalization','probability')
+title('Histogram Coefficient Education');
+histogram(parMatrix(:,3),'Normalization','probability')
+title('Histogram Coefficient Experience');
+histogram(parMatrix(:,4),'Normalization','probability')
+title('Histogram Coefficient smsa');
+histogram(parMatrix(:,5),'Normalization','probability')
+title('Histogram Coefficient Black');
+histogram(parMatrix(:,6),'Normalization','probability')
+title('Histogram Coefficient South');
+histogram(parMatrix(:,7),'Normalization','probability')
+title('Histogram Coefficient Root Mean Squared Error');
 
 
 

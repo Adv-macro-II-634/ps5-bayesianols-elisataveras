@@ -90,21 +90,95 @@ Binghamton University}
 					\hline\\
 					[.25mm]
 				Constant      &      4.9133***   &  (0.063121)   \\  
-				Eduation         &    0.073807*** &   (0.0035336)  \\  
+				Education         &    0.073807*** &   (0.0035336)  \\  
 				Experience    &  0.039313*** &    (0.0021955)   \\ 
 				smsa          &      0.16474***   &  (0.015692)   \\
 				Black        &       -0.18822***  &  (0.017768)   \\
 				South        &       -0.12905***  & (0.015229)   \\ 
-				&\multicolumn{2}{c}{Root Mean Squared Error: 0.377}\\	
+				\hline
+				\multicolumn{3}{l}{Root Mean Squared Error: 0.377}\\
+				\hline	
 				\end{tabular}
 			}
 	\end{center} 
 	\end {table}
 	
-	\item The densities are presented bellow:
+	\item The histogram of the variables are presented bellow:
+	
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{Constact1}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{rmse1}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{South1}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{Black1}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{sms1}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{Exper1}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{Education1}
+	\end{center}
+
+The summary of the first two moments of the distributions can be seen in the following table:
+
+	 \begin {table}[H]
+\begin{center}
+	\caption {Estimation of OLS regression Using Card's data}
+	{
+		\begin{tabular}{l*{2}{c}}
+			\hline
+			&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{Variance}\\
+			\hline\\
+			[.25mm]
+			Constant      &      4.9138   & 0.0040  \\  
+			Education         &  0.0737 &  0.0000  \\  
+			Experience    & 0.0393 &    0.0000   \\ 
+			smsa          &    0.1658   &  0.0003   \\
+			Black        &     -0.1894  &  0.0003 \\
+			South        &      -0.1262 & 0.0002	  \\ 
+			RMSE  			&   0.1425  & 0.0000\\
+			\hline	
+		\end{tabular}
+	}
+\end{center} 
+\end {table}
 	
 	
-	\item Using the values in the homework: 
+	\item The value for education is given by 0.06, which using as prior give the following distribution:
+	
+	
+		\begin{center}
+		\includegraphics[width=0.7\linewidth]{Constact2}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{rmse2}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{South2}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{Black2}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{sms2}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{Exper2}
+	\end{center}
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{Education2}
+	\end{center}
+	
+	
+	\item As we can see, although the distributions contain the actual value chosen on the OLS, 2. and 3. allows for not only have a mean value, which is pretty close to the OLS value, but also to have a distribution over the likely values of the coefficients. This allows for a more general understanding of the coefficient that a point estimation will gives up. 
 
 \end{enumerate}
 
